@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { login } from '@/actions/login';
+import { login } from '@/actions/login'
 import {
   Form,
   FormControl,
@@ -8,22 +8,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from '@/components/ui/form';
-import { LoginSchema } from '@/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, useTransition } from 'react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import FormError from '../form-error';
-import FormSuccess from '../form-success';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import CardWrapper from './card-wrapper';
+} from '@/components/ui/form'
+import { LoginSchema } from '@/schemas'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState, useTransition } from 'react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+import FormError from '../form-error'
+import FormSuccess from '../form-success'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import CardWrapper from './card-wrapper'
 
 export default function LoginForm() {
-  const [error, setError] = useState<string | undefined>('');
-  const [success, setSuccess] = useState<string | undefined>('');
-  const [isSpending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>('')
+  const [success, setSuccess] = useState<string | undefined>('')
+  const [isSpending, startTransition] = useTransition()
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -31,19 +31,18 @@ export default function LoginForm() {
       email: '',
       password: ''
     }
-  });
+  })
 
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-    setError('');
-    setSuccess('');
+    setError('')
+    setSuccess('')
 
     startTransition(() => {
       login(data).then(res => {
-        setError(res.error);
-        setSuccess(res.success);
-      });
-    });
-  };
+        setError(res?.error ?? '')
+      })
+    })
+  }
 
   return (
     <CardWrapper
@@ -102,5 +101,5 @@ export default function LoginForm() {
         </form>
       </Form>
     </CardWrapper>
-  );
+  )
 }
