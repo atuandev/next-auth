@@ -19,8 +19,15 @@ import FormSuccess from '../form-success'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import CardWrapper from './card-wrapper'
+import { useSearchParams } from 'next/navigation'
 
 export default function LoginForm() {
+  const searchParams = useSearchParams()
+  const urlError =
+    searchParams.get('error') === 'OAuthAccountNotLinked'
+      ? 'Email is already registered with a different provider!'
+      : ''
+
   const [error, setError] = useState<string | undefined>('')
   const [success, setSuccess] = useState<string | undefined>('')
   const [isSpending, startTransition] = useTransition()
@@ -39,7 +46,8 @@ export default function LoginForm() {
 
     startTransition(() => {
       login(data).then(res => {
-        setError(res?.error ?? '')
+        setError(res?.error)
+        // setSuccess(res?.success ?? '')
       })
     })
   }
@@ -93,7 +101,7 @@ export default function LoginForm() {
               )}
             ></FormField>
           </div>
-          <FormError message={error} />
+          <FormError message={error || urlError} />
           <FormSuccess message={success} />
           <Button disabled={isSpending} type='submit' className='w-full'>
             Login
