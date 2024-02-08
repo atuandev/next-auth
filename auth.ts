@@ -25,6 +25,20 @@ export const {
     }
   },
   callbacks: {
+    async signIn({ user, account }) {
+      // Allow OAuth providers to sign in
+      if (account?.provider !== 'credentials') return true
+
+      // Credentials provider
+      if (!user || !user.id) return false
+
+      const existingUser = await getUserById(user.id)
+
+      // Prevent sign in if the email is not verified
+      if (!existingUser || !existingUser.emailVerified) return false
+
+      return true
+    },
     async session({ session, token }) {
       if (token.sub && session.user) {
         session.user.id = token.sub
