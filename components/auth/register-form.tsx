@@ -19,6 +19,7 @@ import FormSuccess from '../form-success';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import CardWrapper from './card-wrapper';
+import { PasswordInput } from '../ui/password-input';
 
 export default function RegisterForm() {
   const [error, setError] = useState<string | undefined>('');
@@ -102,7 +103,7 @@ export default function RegisterForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
+                    <PasswordInput
                       {...field}
                       disabled={isSpending}
                       placeholder='******'
