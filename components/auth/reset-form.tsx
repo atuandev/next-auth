@@ -18,6 +18,7 @@ import FormError from '../form-error'
 import FormSuccess from '../form-success'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
+import { LoadingSpinner } from '../ui/loading-spinner'
 import CardWrapper from './card-wrapper'
 
 export default function ResetForm() {
@@ -75,7 +76,7 @@ export default function ResetForm() {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button disabled={isSpending} type='submit' className='w-full'>
-            Send reset email
+            {isSpending ? <LoadingSpinner /> : 'Send reset email'}
           </Button>
         </form>
       </Form>

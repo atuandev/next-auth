@@ -1,5 +1,12 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import { useState, useTransition } from 'react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+
 import { login } from '@/actions/login'
 import {
   Form,
@@ -10,18 +17,13 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { LoginSchema } from '@/schemas'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useState, useTransition } from 'react'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
 import FormError from '../form-error'
 import FormSuccess from '../form-success'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
-import CardWrapper from './card-wrapper'
-import { useSearchParams } from 'next/navigation'
-import Link from 'next/link'
+import { LoadingSpinner } from '../ui/loading-spinner'
 import { PasswordInput } from '../ui/password-input'
+import CardWrapper from './card-wrapper'
 
 export default function LoginForm() {
   const searchParams = useSearchParams()
@@ -114,7 +116,7 @@ export default function LoginForm() {
           <FormError message={error || urlError} />
           <FormSuccess message={success} />
           <Button disabled={isSpending} type='submit' className='w-full'>
-            Login
+            {isSpending ? <LoadingSpinner /> : 'Login'}
           </Button>
         </form>
       </Form>

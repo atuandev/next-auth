@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { register } from '@/actions/register';
+import { register } from '@/actions/register'
 import {
   Form,
   FormControl,
@@ -8,23 +8,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from '@/components/ui/form';
-import { RegisterSchema } from '@/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, useTransition } from 'react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import FormError from '../form-error';
-import FormSuccess from '../form-success';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import CardWrapper from './card-wrapper';
-import { PasswordInput } from '../ui/password-input';
+} from '@/components/ui/form'
+import { RegisterSchema } from '@/schemas'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState, useTransition } from 'react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+import FormError from '../form-error'
+import FormSuccess from '../form-success'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import CardWrapper from './card-wrapper'
+import { PasswordInput } from '../ui/password-input'
+import { LoadingSpinner } from '../ui/loading-spinner'
 
 export default function RegisterForm() {
-  const [error, setError] = useState<string | undefined>('');
-  const [success, setSuccess] = useState<string | undefined>('');
-  const [isSpending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>('')
+  const [success, setSuccess] = useState<string | undefined>('')
+  const [isSpending, startTransition] = useTransition()
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -33,19 +34,19 @@ export default function RegisterForm() {
       password: '',
       name: ''
     }
-  });
+  })
 
   const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
-    setError('');
-    setSuccess('');
+    setError('')
+    setSuccess('')
 
     startTransition(() => {
       register(data).then(res => {
-        setError(res.error);
-        setSuccess(res.success);
-      });
-    });
-  };
+        setError(res.error)
+        setSuccess(res.success)
+      })
+    })
+  }
 
   return (
     <CardWrapper
@@ -118,10 +119,10 @@ export default function RegisterForm() {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button disabled={isSpending} type='submit' className='w-full'>
-            Create
+            {isSpending ? <LoadingSpinner /> : 'Create'}
           </Button>
         </form>
       </Form>
     </CardWrapper>
-  );
+  )
 }

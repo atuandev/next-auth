@@ -21,6 +21,7 @@ import FormSuccess from '../form-success'
 import { Button } from '../ui/button'
 import { PasswordInput } from '../ui/password-input'
 import CardWrapper from './card-wrapper'
+import { LoadingSpinner } from '../ui/loading-spinner'
 
 export default function NewPasswordForm() {
   const searchParams = useSearchParams()
@@ -81,7 +82,7 @@ export default function NewPasswordForm() {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button disabled={isSpending} type='submit' className='w-full'>
-            Reset password
+            {isSpending ? <LoadingSpinner /> : 'Reset'}
           </Button>
         </form>
       </Form>
