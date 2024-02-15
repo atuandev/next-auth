@@ -4,7 +4,8 @@ import NextAuth from 'next-auth'
 import authConfig from '@/auth.config'
 import { db } from '@/lib/db'
 import { UserRole } from '@prisma/client'
-import { getUserById } from './data/user'
+import { getUserById } from '@/data/user'
+import { getTwoFactorConfirmationByUserId } from './data/two-factor-confirmation'
 
 export const {
   handlers: { GET, POST },
@@ -36,6 +37,19 @@ export const {
 
       // Prevent sign in if the email is not verified
       if (!existingUser || !existingUser.emailVerified) return false
+
+      // Prevent sign in if two-factor is enabled
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id
+        )
+
+        if (!twoFactorConfirmation) return false
+
+        await db.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id }
+        })
+      }
 
       return true
     },
