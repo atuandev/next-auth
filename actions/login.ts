@@ -40,7 +40,7 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
 
     return { success: 'Confirmation email sent! Please verify your email.' }
   }
-
+  // TODO: Verify email and password before sending two factor token
   if (existingUser.isTwoFactorEnabled) {
     if (code) {
       // Verify two factor code
