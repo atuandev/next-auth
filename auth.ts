@@ -6,6 +6,7 @@ import { db } from '@/lib/db'
 import { UserRole } from '@prisma/client'
 import { getUserById } from '@/data/user'
 import { getTwoFactorConfirmationByUserId } from './data/two-factor-confirmation'
+import { getAccountById } from './data/account'
 
 export const {
   handlers: { GET, POST },
@@ -54,16 +55,22 @@ export const {
       return true
     },
     async session({ session, token }) {
-      if (token.sub && session.user) {
+      if (session.user && token.sub) {
         session.user.id = token.sub
       }
 
-      if (token.role && session.user) {
+      if (session.user && token.role) {
         session.user.role = token.role as UserRole
       }
 
+      if (session.user && token.email) {
+        session.user.email = token.email
+      }
+
       if (session.user) {
-        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as Boolean
+        session.user.name = token.name
+        session.user.isOAuth = token.isOAuth as boolean
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean
       }
 
       return session
@@ -73,10 +80,16 @@ export const {
 
       const existingUser = await getUserById(token.sub)
 
-      if (existingUser) {
-        token.role = existingUser.role
-        token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled
-      }
+      if (!existingUser) return token
+
+      const existingAccount = await getAccountById(existingUser.id)
+
+      token.isOAuth = !!existingAccount
+
+      token.name = existingUser.name
+      token.email = existingUser.email
+      token.role = existingUser.role
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled
 
       return token
     }
