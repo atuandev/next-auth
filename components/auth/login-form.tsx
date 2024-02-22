@@ -121,8 +121,6 @@ export default function LoginForm() {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className='space-y-4'>
                 <FormField
                   control={form.control}
                   name='password'
