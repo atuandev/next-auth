@@ -17,9 +17,7 @@ export default auth(req => {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
 
-  if (isApiAuthRoute) {
-    return
-  }
+  if (isApiAuthRoute) return
 
   if (isAuthRoute) {
     if (isLoggedIn)
@@ -28,7 +26,16 @@ export default auth(req => {
   }
 
   if (!isPublicRoute && !isLoggedIn) {
-    return Response.redirect(new URL('/auth/login', nextUrl))
+    let callbackUrl = nextUrl.pathname
+    if (nextUrl.search) {
+      callbackUrl += nextUrl.search
+    }
+
+    const encodedCallbackUrl = encodeURIComponent(callbackUrl)
+
+    return Response.redirect(
+      new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
+    )
   }
 
   return
