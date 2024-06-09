@@ -13,6 +13,7 @@ import useCurrentUser from '@/hooks/use-current-user'
 import { ExitIcon } from '@radix-ui/react-icons'
 import { FaUser } from 'react-icons/fa'
 import LogoutButton from './logout-button'
+import Link from 'next/link'
 
 export default function UserButton() {
   const user = useCurrentUser()
@@ -30,7 +31,12 @@ export default function UserButton() {
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href='/settings' className='flex items-center'>
+            <FaUser className='size-4 mr-2' />
+            Profile
+          </Link>
+        </DropdownMenuItem>
         <LogoutButton>
           <DropdownMenuItem>
             <ExitIcon className='size-4 mr-2' />

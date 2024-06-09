@@ -7,7 +7,7 @@ interface UserInfoProps {
   label: string
 }
 
-export default async function UserInfo({ user, label }: UserInfoProps) {
+export default function UserInfo({ user, label }: UserInfoProps) {
   return (
     <Card className='w-[600px] shadow-md'>
       <CardHeader>

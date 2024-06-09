@@ -31,18 +31,19 @@ export const login = async (
     return { error: 'Email does not exist!' }
   }
 
-  if (!existingUser.emailVerified) {
-    const verificationToken = await generateVerificationToken(
-      existingUser.email
-    )
+  // if (!existingUser.emailVerified) {
+  //   const verificationToken = await generateVerificationToken(
+  //     existingUser.email
+  //   )
 
-    await sendVerificationEmail(
-      verificationToken.email,
-      verificationToken.token
-    )
+  //   await sendVerificationEmail(
+  //     verificationToken.email,
+  //     verificationToken.token
+  //   )
 
-    return { success: 'Confirmation email sent! Please verify your email.' }
-  }
+  //   return { success: 'Confirmation email sent! Please verify your email.' }
+  // }
+  
   // TODO: Verify email and password before sending two factor token
   if (existingUser.isTwoFactorEnabled) {
     if (code) {
@@ -91,6 +92,8 @@ export const login = async (
       password,
       redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT
     })
+
+    return { success: 'Logged in!' }
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

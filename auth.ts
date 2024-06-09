@@ -37,7 +37,9 @@ export const {
       const existingUser = await getUserById(user.id)
 
       // Prevent sign in if the email is not verified
-      if (!existingUser || !existingUser.emailVerified) return false
+      // if (!existingUser || !existingUser.emailVerified) return false
+
+      if (!existingUser) return false
 
       // Prevent sign in if two-factor is enabled
       if (existingUser.isTwoFactorEnabled) {
